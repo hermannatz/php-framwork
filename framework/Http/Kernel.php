@@ -10,18 +10,14 @@ class Kernel
 	public function handle(Request $request): Response
 	{
 
-		$dispatcher = simpleDispatcher(function( RouteCollector $routeCollector){
-			$routeCollector->addRoute('GET', '/', function () {
-				$content = '<h1>Hello Response!</h1>';
-				return new Response($content);
-			});
-		});
+		try {
+			[$routeHandler, $vars] = $this->router->dispatch($request);
+			$response = call_user_func_array($routeHandler, $vars);
+		} catch(\Exception $e) {
+			$response = new Response($e->getMessage(), 400);
+		}
 
-		$routeInfo = $dispatcher->dispatch($request->server['REQUEST_METHOD'], $request->server['REQUEST_URI']);
-
-		[$status, $handler, $vars] = $routeInfo;
-		return $handler($vars);
-
+		return $response;
 	}
 
 }

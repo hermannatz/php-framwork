@@ -4,6 +4,8 @@ use CodeBrain\Framework\Http\Kernel;
 use CodeBrain\Framework\Http\Request;
 use CodeBrain\Framework\Http\Response;
 
+define('BASE_PATH', dirname(__DIR__));
+
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 # Request received
